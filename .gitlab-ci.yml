@@ -1,0 +1,12 @@
+---
+test:
+  script:
+    - export MOLECULE_VIM_USER=root
+    - molecule test
+
+    - export MOLECULE_VIM_USER=testuser
+    - molecule create
+    - docker exec -i ansible-role-vim-ubuntu-1604 useradd testuser --create-home
+    - molecule converge
+    - molecule idempotence
+    - molecule destroy

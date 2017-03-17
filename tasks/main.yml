@@ -1,0 +1,53 @@
+---
+- name: Install git
+  apt:
+    name: git
+    state: present
+  tags: vim
+
+- name: Install vim
+  apt:
+    name: "{{ vim_packages }}"
+    state: present
+  tags: vim
+
+- name: Clone vim-config
+  git:
+    repo: https://github.com/viasite/vim-config.git
+    dest: "{{ vim_config_path }}"
+    version: "{{ vim_config_version }}"
+  tags: vim
+
+- name: Create .vim data directory
+  file:
+    path: "{{ vim_config_path }}/.vim"
+    state: directory
+  tags: vim
+
+- name: Symlink .vimrc and .vim for all
+  file:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    state: link
+  with_items:
+    - src: "{{ vim_config_path }}/.vim"
+      path: "~{{ vim_user }}/.vim"
+    - src: "{{ vim_config_path }}/.vimrc"
+      path: "~{{ vim_user }}/.vimrc"
+  tags: vim
+
+- name: Clone vundle
+  git:
+    repo: https://github.com/VundleVim/Vundle.vim.git
+    dest: "~{{ vim_user }}/.vim/bundle/Vundle.vim"
+    version: "{{ vim_vundle_version }}"
+  register: vim_register_vundle_installed
+  tags: vim
+
+- name: Install Vim plugins
+  command: vim -E -s -c 'source ~/.vimrc' -c PluginInstall -c qall
+  register: vim_plugins_installed
+  changed_when: vim_plugins_installed.rc != 0
+  failed_when: false
+  when: vim_register_vundle_installed|changed
+  tags: [ vim, skip_ansible_lint ]
