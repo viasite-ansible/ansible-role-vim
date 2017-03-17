@@ -5,6 +5,6 @@ vim_packages:
 vim_user: '{{ (ansible_ssh_user
           if ansible_ssh_user | d()
           else lookup("env", "USER")) }}'
-vim_config_version: 765b7f7
+vim_config_version: 9149b8c
 vim_vundle_version: f6cc062
 vim_config_path: /etc/vim-config
