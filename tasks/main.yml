@@ -44,10 +44,10 @@
   register: vim_register_vundle_installed
   tags: vim
 
-- name: Install Vim plugins
-  command: vim -E -s -c 'source ~/.vimrc' -c PluginInstall -c qall
-  register: vim_plugins_installed
-  changed_when: vim_plugins_installed.rc != 0
-  failed_when: false
-  when: vim_register_vundle_installed|changed
-  tags: [ vim, skip_ansible_lint ]
+#- name: Install Vim plugins
+#  command: vim -E -s -c 'source ~/.vimrc' -c PluginInstall -c qall
+#  register: vim_plugins_installed
+#  changed_when: vim_plugins_installed.rc != 0
+#  failed_when: false
+#  when: vim_register_vundle_installed|changed
+#  tags: [ vim, skip_ansible_lint ]
