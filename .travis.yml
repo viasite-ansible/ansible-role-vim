@@ -6,22 +6,13 @@ services:
   - docker
 
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+  - docker --version
 install:
   - pip install molecule docker
 before_script:
   - export MOLECULE_APTPROXY_PATH="$PWD/00aptproxy" && touch "$MOLECULE_APTPROXY_PATH"
 script:
-  - export MOLECULE_VIM_USER=root
-  - molecule test
-
-  - export MOLECULE_VIM_USER=testuser
-  - molecule create
-  - docker exec -i ansible-role-vim-1604 useradd testuser --create-home
-  - molecule converge
-  - molecule idempotence
-  - molecule destroy
+  - molecule test --all
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
