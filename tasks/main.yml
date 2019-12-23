@@ -49,5 +49,5 @@
   register: vim_plugins_installed
   changed_when: vim_plugins_installed.rc != 0
   failed_when: false
-  when: vim_register_vundle_installed|changed
+  when: vim_register_vundle_installed is changed
   tags: [ vim, skip_ansible_lint ]
